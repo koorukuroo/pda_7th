@@ -98,7 +98,8 @@
 
 ### 1.4. 데이터베이스(OLTP) 성능 비교
 
-<img width="1200" height="700" alt="image" src="https://github.com/user-attachments/assets/82547302-8b99-429e-aab1-80861905aa90" />
+<img width="1000" height="600" alt="image" src="https://github.com/user-attachments/assets/dd5958a8-6d24-47df-a0a5-0f5e3346002b" />
+
 
 
 | 지표 (Metric) | t4g.medium | m7g.large | m7g.xlarge | r7g.large | m6i.large (x86) |
