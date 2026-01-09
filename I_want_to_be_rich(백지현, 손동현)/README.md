@@ -116,9 +116,7 @@ KOSPI_t = \alpha + \beta \cdot NASDAQ_{t-1}
 
 ### 2.1 테스트 대상 인스턴스
 
-<table>
-  <tr>
-    <td>
+
 
 | 인스턴스  | vCPU | RAM | 아키텍처    | 특징          |
 | --------- | ---- | --- | ----------- | ------------- |
@@ -130,14 +128,7 @@ KOSPI_t = \alpha + \beta \cdot NASDAQ_{t-1}
 | m5.large  | 2    | 8GB | x86 (Intel) | 최신 범용형   |
 | c7i.large | 2    | 4GB | x86 (Intel) | CPU 최적화    |
 
-</td>
-<td>
 
-<img src="https://github.com/user-attachments/assets/60001ae6-79ac-4d53-924a-2041b7b34458" width="450"/>
-
-</td>
-  </tr>
-</table>
 
 
 
@@ -159,7 +150,6 @@ KOSPI_t = \alpha + \beta \cdot NASDAQ_{t-1}
 - **CPU 사용률**: 평균 및 최대 사용률 (%)
 - **메모리 사용량**: RSS 기준 평균 및 최대 (MB)
 
----
 
 
 ### 2.4 성능 측정 방식
@@ -178,6 +168,11 @@ KOSPI_t = \alpha + \beta \cdot NASDAQ_{t-1}
 
 ### 3.1 전체 성능 비교
 
+<table>
+  <tr>
+    <td>
+    
+
 | 인스턴스      | 분석시간(s) | 처리량(rows/s) | CPU평균(%) | 메모리(MB) |
 | ------------- | ----------- | -------------- | ---------- | ---------- |
 | **c7i.large** | **0.463**   | **410,443**    | 65.4       | 183        |
@@ -187,6 +182,16 @@ KOSPI_t = \alpha + \beta \cdot NASDAQ_{t-1}
 | t3.medium     | 0.908       | 209,259        | 67.8       | 184        |
 | t3.micro      | 0.929       | 204,554        | 64.1       | 183        |
 | t3.large      | 1.079       | 175,965        | 72.3       | 183        |
+
+</td>
+<td>
+
+<img src="https://github.com/user-attachments/assets/60001ae6-79ac-4d53-924a-2041b7b34458" width="450"/>
+
+</td>
+  </tr>
+</table>
+
 
 ### 3.2 성능 순위
 
