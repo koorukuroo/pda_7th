@@ -39,7 +39,7 @@
     - 데이터 소스: KIS 모의투자 서버 REST API
     - 병렬 실행: asyncio 기반 비동기 Task (수집+분석+S3 업로드 동시 수행)
 - 측정 항목:
-    - 성능 지표: 평균 지연 시간(Average Latency), Tail Latency, 초당 처리량(Throughput).
+    - 성능 지표: 평균 지연 시간(Average Latency), 꼬리 지연 시간 (Tail latency), 초당 처리량(Throughput).
     - 자원 지표: 평균 CPU 사용률(%), 최대 메모리 점유율(MB)
     - 네트워크: S3 업로드 전송 속도(KB/s)
     - 경제성: 비용 효율성 (1달러 당 처리량)
@@ -163,7 +163,7 @@ cost_per_tx = INSTANCE_HOURLY_COST / (throughput * 3600)
 
 # 실험 결과
 
-| 인스턴스 | Tail latency | 평균 지연 시간 (s) | 초당 처리량 (TX/s) | CPU 사용률 (%) | S3 전송 속도 (KB/s) | 비용 효율성 **(1달러당 처리량)** |
+| 인스턴스 | 꼬리 지연 시간 (Tail latency) | 평균 지연 시간 (s) | 초당 처리량 (TX/s) | CPU 사용률 (%) | S3 전송 속도 (KB/s) | 비용 효율성 **(1달러당 처리량)** |
 | --- | --- | --- | --- | --- | --- | --- |
 | **t4g.medium** | 0.3200 | 0.203 | 0.280 | 27.5% | 997.4 | **30,034건** |
 | **t3.medium** | 0.2744 | 0.169 | **0.317** | 18.7% | 183.0 | **27,429건** |
@@ -171,7 +171,7 @@ cost_per_tx = INSTANCE_HOURLY_COST / (throughput * 3600)
 | **c6i.large** | 0.2282 | 0.132 | 0.204 | **10.3%** | 364.7 | 8,633건 |
 | **r6i.large** | **0.2256** | **0.131** | 0.175 | 12.3% | 206.7 | 4,992건 |
 
-### Tail Latency & 평균 지연 시간
+### 꼬리 지연 시간 (Tail latency) & 평균 지연 시간
 
 <img width="45%" height="600" alt="Code_Generated_Image-8" src="https://github.com/user-attachments/assets/e512f894-d499-4f2c-8f4f-235b95fa8f02" /> <img width="45%" height="600" alt="Code_Generated_Image-7" src="https://github.com/user-attachments/assets/d2849e12-453c-4543-b6c4-9d1057149be3" />
 
@@ -179,7 +179,7 @@ cost_per_tx = INSTANCE_HOURLY_COST / (throughput * 3600)
 
 - **결과**: c6i.large와 r6i.large가 가장 낮고(빠름), t4g.medium과 t3.medium이 가장 높게 나타났다.
 - **이유**:
-    - **인스턴스 등급 차이**: c6i, m6i, r6i는 전용 자원을 사용하는 **매니지드 인스턴스이**다. 반면 t 시리즈는 **버스터블(Burstable)** 인스턴스로, 평소에는 낮은 성능을 유지하다 필요할 때만 CPU 크레딧을 소모해 성능을 높인다. 이 과정에서 지연 시간이 발생하거나 성능 변동성(Tail Latency)이 커질 수 있다.
+    - **인스턴스 등급 차이**: c6i, m6i, r6i는 전용 자원을 사용하는 **매니지드 인스턴스이**다. 반면 t 시리즈는 **버스터블(Burstable)** 인스턴스로, 평소에는 낮은 성능을 유지하다 필요할 때만 CPU 크레딧을 소모해 성능을 높인다. 이 과정에서 지연 시간이 발생하거나 성능 변동성(꼬리 지연 시간 (Tail latency))이 커질 수 있다.
     - **CPU 세대**: c6i와 r6i는 최신 Intel Xeon Scalable(Ice Lake) 프로세서를 사용하여 연산 처리 속도가 근본적으로 빠르다.
 
 ### 평균 처리량 (Average Throughput)
