@@ -173,9 +173,9 @@ cost_per_tx = INSTANCE_HOURLY_COST / (throughput * 3600)
 
 ### Tail Latency & 평균 지연 시간
 
-![Code_Generated_Image-8.png](%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4/Code_Generated_Image-8.png)
+<img width="45%" height="600" alt="Code_Generated_Image-8" src="https://github.com/user-attachments/assets/e512f894-d499-4f2c-8f4f-235b95fa8f02" /> <img width="45%" height="600" alt="Code_Generated_Image-7" src="https://github.com/user-attachments/assets/d2849e12-453c-4543-b6c4-9d1057149be3" />
 
-![Code_Generated_Image-7.png](%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4/Code_Generated_Image-7.png)
+
 
 - **결과**: c6i.large와 r6i.large가 가장 낮고(빠름), t4g.medium과 t3.medium이 가장 높게 나타났다.
 - **이유**:
@@ -184,7 +184,7 @@ cost_per_tx = INSTANCE_HOURLY_COST / (throughput * 3600)
 
 ### 평균 처리량 (Average Throughput)
 
-![Code_Generated_Image-6.png](%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4/Code_Generated_Image-6.png)
+<img width="1000" height="600" alt="Code_Generated_Image-6" src="https://github.com/user-attachments/assets/944452ab-a6bf-48a6-9424-94e2acc98e24" />
 
 - **결과**: t3.medium과 t4g.medium이 상대적으로 높은 수치를 기록했다.
 - **이유**:
@@ -193,7 +193,8 @@ cost_per_tx = INSTANCE_HOURLY_COST / (throughput * 3600)
 
 ### 평균 CPU 사용률 (Average CPU Usage)
 
-![Code_Generated_Image-5.png](%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4/Code_Generated_Image-5.png)
+<img width="1000" height="600" alt="Code_Generated_Image-5" src="https://github.com/user-attachments/assets/78009926-5ac2-4e7b-b862-f56d76b56038" />
+
 
 - **결과**: c6i.large가 가장 낮고, t4g.medium이 가장 높다.
 - **이유**:
@@ -202,7 +203,8 @@ cost_per_tx = INSTANCE_HOURLY_COST / (throughput * 3600)
 
 ### S3 전송 속도 (Average S3 Upload Speed)
 
-![Code_Generated_Image-4.png](%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4/Code_Generated_Image-4.png)
+<img width="1000" height="600" alt="Code_Generated_Image-4" src="https://github.com/user-attachments/assets/17f10b81-d4cf-4341-83fb-4dea8473d171" />
+
 
 - **결과**: m6i.large가 압도적으로 빠르고, r6i나 t3는 상대적으로 낮다.
 - **이유**:
@@ -211,7 +213,7 @@ cost_per_tx = INSTANCE_HOURLY_COST / (throughput * 3600)
 
 ### 비용 효율성(1달러 당 처리량)
 
-![Code_Generated_Image-3.png](%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4/Code_Generated_Image-3.png)
+<img width="1000" height="600" alt="Code_Generated_Image-3" src="https://github.com/user-attachments/assets/735e3e09-ea7f-4c32-a548-eeca2b0f255c" />
 
 - **결과**: t4g.medium과 t3.medium이 대형 인스턴스들보다 수 배 이상 높았습니다.
 - **이유**:
@@ -220,7 +222,8 @@ cost_per_tx = INSTANCE_HOURLY_COST / (throughput * 3600)
 
 ### CPU와 Memory 사용률의 차이
 
-![Code_Generated_Image-9.png](%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4/Code_Generated_Image-9.png)
+<img width="1200" height="700" alt="Code_Generated_Image-9" src="https://github.com/user-attachments/assets/5c274b42-2ca8-4d3b-879f-4fb48339571b" />
+
 
 - **결과**: r6i는 메모리 사용률이 매우 낮고, t4g는 CPU 사용률이 매우 높다.
 - **이유**:
