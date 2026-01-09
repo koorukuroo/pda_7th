@@ -27,14 +27,9 @@ Python yfinance 라이브러리를 활용하여 Yahoo Finance로부터 6개 주�
 HTML5 Canvas 및 Chart.js를 사용하여 시계열 데이터를 시각화함. 
 <img width="1440" height="747" alt="Image" src="https://github.com/user-attachments/assets/166ca5b9-af50-46bb-8da7-2755d9da50ac" />
 
-<img width="1440" height="747" alt="Image" src="https://github.com/user-attachments/assets/166ca5b9-af50-46bb-8da7-2755d9da50ac" />
-
 ### 3. 스케줄드 스케일링
 장 시작 전 인스턴스를 선제적으로 3개까지 확장하도록 Auto Scaling Group(ASG)을 설정하여 초기 트래픽 스파이크에 대응함.
 <img width="500" height="500" alt="Image" src="https://github.com/user-attachments/assets/cc30ce07-3549-4cf2-be7b-ec079d17e76f" />
-
-<img width="600" height="600" alt="Image" src="https://github.com/user-attachments/assets/cc30ce07-3549-4cf2-be7b-ec079d17e76f" />
-
 
 ## 부하 테스트 시나리오 (Load Test Scenarios)
 ### 1. 테스트 도구
@@ -60,9 +55,9 @@ HTTP 부하 발생 도구인 hey를 사용하여 실제 접속 상황을 모사�
 
     <img width="450" height="333" alt="Image" src="https://github.com/user-attachments/assets/4492b14f-41a8-4130-af5f-2c6542dd2da5" />
 
-    <img width="507" height="329" alt="Image" src="https://github.com/user-attachments/assets/39de691f-2104-479d-86a7-35b498bc519c" />
+    <img width="450" height="333" alt="Image" src="https://github.com/user-attachments/assets/39de691f-2104-479d-86a7-35b498bc519c" />
 
-    <img width="507" height="329" alt="Image" src="https://github.com/user-attachments/assets/ae5ee9c5-49c1-4574-803b-d0392d54041a" />
+    <img width="450" height="333" alt="Image" src="https://github.com/user-attachments/assets/ae5ee9c5-49c1-4574-803b-d0392d54041a" />
 
 
 ### 2. 결론
@@ -104,6 +99,6 @@ HTTP 부하 발생 도구인 hey를 사용하여 실제 접속 상황을 모사�
 - 서버 내부에서 요청이 처리되기까지 대기하는 시간이 성능을 결정하기 때문에
 - cpu 사용 + 메모리 접근 + 객체 성능이 균형한 M계열이 더 좋은 성능을 보임
 
-<img width="900" height="666" alt="Image" src="https://github.com/user-attachments/assets/80951883-589f-4408-8bda-884c02eec7fa" />
+<img width="450" height="333" alt="Image" src="https://github.com/user-attachments/assets/80951883-589f-4408-8bda-884c02eec7fa" />
 
-<img width="900" height="666" alt="Image" src="https://github.com/user-attachments/assets/f1e8e040-354c-45c9-bb94-8601594fea79" />
+<img width="450" height="333" alt="Image" src="https://github.com/user-attachments/assets/f1e8e040-354c-45c9-bb94-8601594fea79" />
