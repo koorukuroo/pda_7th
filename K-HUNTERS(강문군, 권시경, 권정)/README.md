@@ -11,7 +11,7 @@
 ## 실험 설계 및 환경 구성 (Experimental Design)
 ### 1. 통제 변수 설정
 실험의 변별력을 위해 아래 항목을 모든 인스턴스에 동일하게 고정함.
-  - 인스턴스 크기: .medium (2 vCPU / 4 GiB RAM 기준)
+  - 인스턴스 크기: .medium
   - 스토리지: gp3 / 20 GB (IOPS 변동성 차단)
   - 운영체제: Amazon Linux 2023 (AWS 최적화 커널)
   - 리전: 서울 (ap-northeast-2, 네트워크 거리 통제)
@@ -27,10 +27,13 @@ Python yfinance 라이브러리를 활용하여 Yahoo Finance로부터 6개 주�
 HTML5 Canvas 및 Chart.js를 사용하여 시계열 데이터를 시각화함. 
 <img width="1440" height="747" alt="Image" src="https://github.com/user-attachments/assets/166ca5b9-af50-46bb-8da7-2755d9da50ac" />
 
+<img width="1440" height="747" alt="Image" src="https://github.com/user-attachments/assets/166ca5b9-af50-46bb-8da7-2755d9da50ac" />
+
 ### 3. 스케줄드 스케일링
 장 시작 전 인스턴스를 선제적으로 3개까지 확장하도록 Auto Scaling Group(ASG)을 설정하여 초기 트래픽 스파이크에 대응함.
 <img width="500" height="500" alt="Image" src="https://github.com/user-attachments/assets/cc30ce07-3549-4cf2-be7b-ec079d17e76f" />
 
+<img width="600" height="600" alt="Image" src="https://github.com/user-attachments/assets/cc30ce07-3549-4cf2-be7b-ec079d17e76f" />
 
 
 ## 부하 테스트 시나리오 (Load Test Scenarios)
@@ -50,16 +53,16 @@ HTTP 부하 발생 도구인 hey를 사용하여 실제 접속 상황을 모사�
 ## 성능 결과 분석 (Performance Analysis)
 ### 1. m7g.medium vs c6g.medium 성능 비교
 
-- m계열이 c 계열보다 더 높은 처리량(rps)과 더 짧은 총 처리 시간을 기록함.
+- m계열이 c 계열보다 더 높은 처리량(rps)과 더 짧은 총 처리 시간을 기록함. 
 - 평균, p95, p99, 최대 지연 시간으로 구성된 latency profile에서도 m 계열은 지연 분포가 좁고 안정적인 반면, c 계열은 지연이 전반적으로 더 크고 tail latency가 크게 증가하는 모습을 확인함.
 
-<img width="450" height="333" alt="Image" src="https://github.com/user-attachments/assets/3acb7843-6684-4fba-b067-7da715c3454a" />
+    <img width="450" height="333" alt="Image" src="https://github.com/user-attachments/assets/3acb7843-6684-4fba-b067-7da715c3454a" />
 
-<img width="450" height="333" alt="Image" src="https://github.com/user-attachments/assets/4492b14f-41a8-4130-af5f-2c6542dd2da5" />
+    <img width="450" height="333" alt="Image" src="https://github.com/user-attachments/assets/4492b14f-41a8-4130-af5f-2c6542dd2da5" />
 
-<img width="443" height="329" alt="Image" src="https://github.com/user-attachments/assets/39de691f-2104-479d-86a7-35b498bc519c" />
+    <img width="507" height="329" alt="Image" src="https://github.com/user-attachments/assets/39de691f-2104-479d-86a7-35b498bc519c" />
 
-<img width="443" height="329" alt="Image" src="https://github.com/user-attachments/assets/ae5ee9c5-49c1-4574-803b-d0392d54041a" />
+    <img width="507" height="329" alt="Image" src="https://github.com/user-attachments/assets/ae5ee9c5-49c1-4574-803b-d0392d54041a" />
 
 
 ### 2. 결론
@@ -80,9 +83,7 @@ HTTP 부하 발생 도구인 hey를 사용하여 실제 접속 상황을 모사�
   <img width="697" height="354" alt="Image" src="https://github.com/user-attachments/assets/8fd0069c-a7bb-49c0-86d4-b1b351799831" />
 
 2. 결과 요약 및 시사점
-  - 처리 효율의 격차: 동일한 vCPU와 RAM 환경임에도 m7g(Graviton3)가 초당 처리량에서 약 44%의 우위를 보인 것은 최신 아키텍처의 연산 효율성이 주식 데이터 처리와 같은 실시간 워크로드에 더 적합함을 파악함.
-  - 응답 안정성: 특히 99% Latency 지표에서 m7g가 c6g 대비 약 5.2초 더 빠른 응답을 기록한 점은, 트래픽 폭주 시에도 대다수의 사용자에게 일관된 서비스를 제공할 수 있음을 의미함.
-  - 인프라 결론: 두 인스턴스 모두 10만 건 이상의 요청에서 타임아웃 에러가 발생한 점을 미루어 볼 때, 단일 노드의 수직적 확장(Scale-up)보다는 로드 밸런서를 활용한 수평적 확장(Scale-out) 전략이 필수적임을 정량적으로 확인함.
+    - 처리 효율의 격차: m7g(Graviton3)가 초당 처리량에서 약 44%의 우위를 보인 것은 최신 아키텍처의 연산 효율성이 주식 데이터 처리와 같은 실시간 워크로드에 더 적합함을 파악함.
 
 ### 추가 최적화 실험: Nginx 역방향 프록시 도입
 
