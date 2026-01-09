@@ -57,7 +57,7 @@
 
 ### 1.1. CPU 성능 비교
 
-![CPU Performance Comparison](cpu_performance.png)
+![CPU Performance Comparison](https://raw.githubusercontent.com/koorukuroo/pda_7th/DBDBDeep/DBDBDeep/DBphoto/cpu_performance.png)
 
 | 지표 (Metric) | t4g.medium | m7g.large | m7g.xlarge | r7g.large | m6i.large (x86) |
 |:---|:---:|:---:|:---:|:---:|:---:|
@@ -71,7 +71,7 @@
 
 ### 1.2. 메모리 성능 비교
 
-![Memory Performance Comparison](memory_performance.png)
+![Memory Performance Comparison](https://raw.githubusercontent.com/koorukuroo/pda_7th/DBDBDeep/DBDBDeep/DBphoto/memory_performance.png)
 
 | 지표 (Metric) | t4g.medium | m7g.large | m7g.xlarge | r7g.large | m6i.large (x86) |
 |:---|:---:|:---:|:---:|:---:|:---:|
@@ -84,27 +84,27 @@
 
 ### 1.3. 파일 I/O 성능 비교
 
-![File I/O Performance Comparison](file_io_performance.png)
+![File I/O Performance Comparison](https://raw.githubusercontent.com/koorukuroo/pda_7th/DBDBDeep/DBDBDeep/DBphoto/file_io_performance.png)
 
-| 지표 (Metric) | t4g.medium | m7g.large | m7g.xlarge | r7g.large | m6i.large (x86) |
-|:---|:---:|:---:|:---:|:---:|:---:|
-| **읽기 속도 (reads/s)** | 2171.39 | 2985.44 | 4512.79 | **4513.21** | 3003.57 |
-| **쓰기 속도 (writes/s)** | 1447.57 | 1990.27 | 3008.55 | **3008.81** | 2002.36 |
-| **읽기 처리량 (read, MiB/s)** | 33.93 | 46.65 | 70.51 | **70.52** | 46.93 |
-| **쓰기 처리량 (written, MiB/s)**| 22.62 | 31.10 | 47.01 | **47.01** | 31.29 |
-| **Latency (95th percentile, ms)**| 1.86 | 1.82 | **1.76** | **1.76** | 1.82 |
+| 지표 (Metric)                       | t4g.medium | m7g.large | m7g.xlarge |  r7g.large  | m6i.large (x86) |
+| :-------------------------------- | :--------: | :-------: | :--------: | :---------: | :-------------: |
+| **읽기 속도 (reads/s)**               |  2171.39   |  2985.44  |  4512.79   | **4513.21** |     3003.57     |
+| **쓰기 속도 (writes/s)**              |  1447.57   |  1990.27  |  3008.55   | **3008.81** |     2002.36     |
+| **읽기 처리량 (read, MiB/s)**          |   33.93    |   46.65   |   70.51    |  **70.52**  |      46.93      |
+| **쓰기 처리량 (written, MiB/s)**       |   22.62    |   31.10   |   47.01    |  **47.01**  |      31.29      |
+| **Latency (95th percentile, ms)** |    1.86    |   1.82    |  **1.76**  |  **1.76**   |      1.82       |
 
 *   **분석**: 파일 I/O 성능은 인스턴스 크기에 비례하여 증가하는 경향을 보입니다. vCPU가 4개인 `m7g.xlarge`와 `r7g.large`가 가장 뛰어난 성능을 보였습니다.
 
 ### 1.4. 데이터베이스(OLTP) 성능 비교
 
-![DB Performance Comparison](db_performance.png)
+![DB Performance Comparison](https://raw.githubusercontent.com/koorukuroo/pda_7th/DBDBDeep/DBDBDeep/DBphoto/db_performance.png)
 
-| 지표 (Metric)                       | t4g.medium  | m7g.large | m7g.xlarge | r7g.large  | m6i.large |
-| :-------------------------------- | :---------: | :-------: | :--------: | :--------: | --------- |
-| **처리량 (TPS)**                     | **229.43**  |  226.57   |   225.50   |   226.40   | 224.88    |
-| **쿼리 처리량 (QPS)**                  | **4588.63** |  4531.49  |  4509.96   |  4527.93   | 4497.55   |
-| **Latency (95th percentile, ms)** |   831.46    |  773.68   | **759.88** | **759.88** | 773.68    |
+| 지표 (Metric) | t4g.medium | m7g.large | m7g.xlarge | r7g.large |
+|:---|:---:|:---:|:---:|:---:|
+| **처리량 (TPS)** | **229.43** | 226.57 | 225.50 | 226.40 |
+| **쿼리 처리량 (QPS)** | **4588.63** | 4531.49 | 4509.96 | 4527.93 |
+| **Latency (95th percentile, ms)**| 831.46 | 773.68 | **759.88** | **759.88** |
 
 *   **분석**: 모든 인스턴스가 비슷한 TPS를 기록, 이는 테스트 부하가 디스크 I/O 병목에 먼저 도달했음을 시사합니다. 하지만 Latency는 인스턴스 등급이 높을수록 낮아져 안정성이 향상됨을 알 수 있습니다.
 
@@ -139,10 +139,7 @@ SQL statistics:
 Latency (ms):
          95th percentile:                     2320.55
 ```
-![[Pasted image 20260108201633.png]]
-![[Pasted image 20260108201730.png]]
 
-![[Pasted image 20260108201753.png]]
 #### 3. `r7g.large` 고정 성능
 ```
 SQL statistics:
@@ -151,16 +148,21 @@ SQL statistics:
 Latency (ms):
          95th percentile:                      337.94
 ```
-
+![A](https://raw.githubusercontent.com/koorukuroo/pda_7th/DBDBDeep/DBDBDeep/DBphoto/A.png)
+![B](https://raw.githubusercontent.com/koorukuroo/pda_7th/DBDBDeep/DBDBDeep/DBphoto/B.png)
+![C](https://raw.githubusercontent.com/koorukuroo/pda_7th/DBDBDeep/DBDBDeep/DBphoto/C.png)
 ### 2.3. 분석: T-시리즈의 '크레딧 절벽'과 성능 붕괴
-
-![[t_vs_r_latency_comparison.png]]
-![[t_vs_r_tps_comparison.png]]
 
 | 지표 (Metric) | `t4g.medium` (최고 성능) | `t4g.medium` (크레딧 소진 후) | `r7g.large` (고정 성능) |
 |:---|:---:|:---:|:---:|
 | **처리량 (TPS)** | 571.99 건/초 | 118.80 건/초 | **758.88 건/초** |
 | **95% 응답시간 (Latency)** | 450.77 ms | 2320.55 ms | **337.94 ms** |
+
+![DB Performance (TPS): T-Series vs R-Series](https://raw.githubusercontent.com/koorukuroo/pda_7th/DBDBDeep/DBDBDeep/DBphoto/t_vs_r_tps_comparison.png)
+*<그래프 1: 처리량(TPS) 비교. 크레딧 소진 후 t4g.medium의 성능이 급격히 저하됨을 보여줍니다.>*
+
+![DB Performance (Latency): T-Series vs R-Series](https://raw.githubusercontent.com/koorukuroo/pda_7th/DBDBDeep/DBDBDeep/DBphoto/t_vs_r_latency_comparison.png)
+*<그래프 2: 95% 응답시간(Latency) 비교. 크레딧 소진 후 t4g.medium의 응답시간이 치명적인 수준으로 급증했음을 보여줍니다.>*
 
 - **처리량(TPS) 79% 감소**: 크레딧이 소진되자 `t4g.medium`의 DB 처리 능력은 초당 572건에서 119건으로 **약 5분의 1 토막**이 났습니다.
 - **응답시간(Latency) 5.1배 급증**: 사용자가 체감하는 반응 속도는 0.45초에서 **2.3초로 5배 이상 느려졌습니다.** 증권 거래 시스템에서 이는 치명적인 장애로 이어질 수 있습니다.
