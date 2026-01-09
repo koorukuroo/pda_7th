@@ -98,13 +98,14 @@
 
 ### 1.4. 데이터베이스(OLTP) 성능 비교
 
-![DB Performance Comparison](https://raw.githubusercontent.com/koorukuroo/pda_7th/DBDBDeep/DBDBDeep/DBphoto/db_performance.png)
+<img width="1200" height="700" alt="image" src="https://github.com/user-attachments/assets/82547302-8b99-429e-aab1-80861905aa90" />
 
-| 지표 (Metric) | t4g.medium | m7g.large | m7g.xlarge | r7g.large |
-|:---|:---:|:---:|:---:|:---:|
-| **처리량 (TPS)** | **229.43** | 226.57 | 225.50 | 226.40 |
-| **쿼리 처리량 (QPS)** | **4588.63** | 4531.49 | 4509.96 | 4527.93 |
-| **Latency (95th percentile, ms)**| 831.46 | 773.68 | **759.88** | **759.88** |
+
+| 지표 (Metric) | t4g.medium | m7g.large | m7g.xlarge | r7g.large | m6i.large (x86) |
+|:---|:---:|:---:|:---:|:---:|:---:|
+| **처리량 (TPS)** | **229.43** | 226.57 | 225.50 | 226.40 | 224.88 |
+| **쿼리 처리량 (QPS)** | **4588.63** | 4531.49 | 4509.96 | 4527.93 | 4497.55 |
+| **Latency (95th percentile, ms)**| 831.46 | 773.68 | **759.88** | **759.88** | 773.68 |
 
 *   **분석**: 모든 인스턴스가 비슷한 TPS를 기록, 이는 테스트 부하가 디스크 I/O 병목에 먼저 도달했음을 시사합니다. 하지만 Latency는 인스턴스 등급이 높을수록 낮아져 안정성이 향상됨을 알 수 있습니다.
 
