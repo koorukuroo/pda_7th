@@ -50,6 +50,61 @@
 * *목적:* 서버의 한계(Limit) 상황에서 인스턴스별 **성능 격차(Performance Gap)** 및 **지연 시간(Latency) 차이** 비교 분석
 
 
+네, 설명 없이 **코드 위주로 깔끔하게** 정리했습니다.
+제목과 파일명만 남겨서 바로 붙여넣기 좋게 수정했습니다.
+
+
+### 1-5. 테스트 시뮬레이션 코드 (Simulation Code)
+
+① 수비자 (Target Server) : CPU 부하 시뮬레이션 
+
+* **File:** `app.py`
+
+```python
+from flask import Flask, jsonify
+import hashlib
+import time
+
+app = Flask(__name__)
+stock = 1000  # 선착순 1,000명 한정
+
+@app.route('/join', methods=['POST'])
+def join_event():
+    global stock
+    
+    # [CPU 부하 테스트 포인트]
+    # 실제 서비스의 복잡한 비즈니스 로직/암호화를 시뮬레이션
+    # t2.micro와 c5.large의 연산 속도 차이를 측정하기 위함
+    for _ in range(50000): 
+        hashlib.sha256(b"transaction_verification").hexdigest()
+    
+    if stock > 0:
+        stock -= 1
+        return jsonify({"status": "success", "remain": stock}), 200
+    else:
+        return jsonify({"status": "fail", "msg": "Sold Out"}), 410
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+
+```
+
+② 공격자 (Load Generator) : 트래픽 발생기 
+
+* **File:** `locustfile.py`
+
+```python
+from locust import HttpUser, task, between
+
+class TrafficGenerator(HttpUser):
+    # 유저 1명당 1~2초 간격으로 재요청 (광클 방지 텀)
+    wait_time = between(1, 2)
+
+    @task
+    def attempt_join(self):
+        self.client.post("/join")
+
+```
 
 ---
 
@@ -122,4 +177,5 @@ Netdata를 활용하여 부하 테스트(15분 지속) 중 CPU의 실시간 상�
 
 
 * **결론:** 선착순 이벤트와 같이 트래픽이 지속되는 환경에서는 T계열 인스턴스가 서비스 지연(Latency Spike)의 원인이 될 수 있음.
+
 
