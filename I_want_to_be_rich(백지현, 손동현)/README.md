@@ -228,7 +228,7 @@ KOSPI_t = \alpha + \beta \cdot NASDAQ_{t-1}
 | 처리량     | 244,262 rows/s  | 233,164 rows/s    | **+4.8%**   |
 | CPU 사용률 | 86.8%           | 67.9%             | 높은 활용도 |
 
-동일한 스펙(2 vCPU, 8GB RAM)임에도 **m5가 m4보다 빠른 성능**을 보였다. 이는 Intel Xeon 프로세서 세대 차이(Broadwell/Haswell → Skylake/Cascade Lake)에 기인한 것으로 추정된다.
+동일한 스펙(2 vCPU, 8GB RAM)임에도 **m5가 m4보다 빠른 성능**을 보였다. 이는 세대 차이에 기인한 것으로 추정된다.
 
 **결론**: 구세대 인스턴스는 피하고, **최신 세대를 선택하는 것이 중요**하다.
 
