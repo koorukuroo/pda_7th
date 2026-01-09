@@ -112,16 +112,15 @@ KOSPI_t = \alpha + \beta \cdot NASDAQ_{t-1}
 
 </details>
 
-## 1-1. 인스턴스
-
-### 유형과 표기법
-<img width="550" height="400" alt="스크린샷 2026-01-09 오전 9 51 39" src="https://github.com/user-attachments/assets/92bea7b0-f05a-447d-b07c-873eea71a909" />
-<img width="450" height="320" alt="스크린샷 2026-01-09 오전 9 50 16" src="https://github.com/user-attachments/assets/83836b75-9baa-4cea-a8d5-7b0751b8a239" />
 
 
 ## 2. 실험 환경 및 설정
 
 ### 2.1 테스트 대상 인스턴스
+
+<table>
+  <tr>
+    <td>
 
 | 인스턴스  | vCPU | RAM | 아키텍처    | 특징          |
 | --------- | ---- | --- | ----------- | ------------- |
@@ -132,6 +131,17 @@ KOSPI_t = \alpha + \beta \cdot NASDAQ_{t-1}
 | m4.large  | 2    | 8GB | x86 (Intel) | 구세대 범용형 |
 | m5.large  | 2    | 8GB | x86 (Intel) | 최신 범용형   |
 | c7i.large | 2    | 4GB | x86 (Intel) | CPU 최적화    |
+
+</td>
+<td>
+
+<img src="https://github.com/user-attachments/assets/60001ae6-79ac-4d53-924a-2041b7b34458" width="450"/>
+
+</td>
+  </tr>
+</table>
+
+
 
 ### 2.2 실험 조건
 
