@@ -91,5 +91,5 @@ m계열이 c 계열보다 더 높은 처리량(rps)과 더 짧은 총 처리 시
 
 2. 결과
 
-<img width="1280" height="615" alt="Image" src="https://github.com/user-attachments/assets/75ca7009-13fd-4b0c-a588-21a55ddbbe86" />
+<img width="1100" height="666" alt="Image" src="https://github.com/user-attachments/assets/824f64b9-7096-49c4-be46-07e40e1f7d7a" />
 
