@@ -1,0 +1,248 @@
+# 트래픽 스파이크 방어전: T3와 C6i, 그리고 Python의 한계 실험
+
+<br/>
+
+## 1. 프로젝트 개요 (Project Overview)
+
+### 1-1. 주제 선택 배경
+클라우드 환경에서 EC2 인스턴스를 선택할 때, 사양(vCPU, 메모리)만으로 실제 서비스 성능을 판단하는 데에는 한계가 있습니다. 특히 수강신청이나 은행의 선착순 금융 상품과 같이 짧은 시간에 트래픽이 집중되는 서비스에서는 평상시 성능보다 트래픽 폭주 상황에서 서버가 얼마나 안정적으로 동작하는지가 더 중요합니다. 따라서 본 프로젝트는 실제 금융 서비스에서 발생할 수 있는 선착순 이벤트 상황을 가정하여, 인스턴스의 세대·크기·구성 방식에 따라 성능과 안정성에 어떤 차이가 발생하는지를 실험적으로 검증하고자 합니다.
+
+<br/>
+
+### 1-2. 실험 배경 및 목적: "비용과 안정성의 딜레마 해결"
+
+클라우드 환경에서 무조건 고사양의 서버(Scale-up)를 사용하는 것은 비용 비효율적입니다. 반대로 비용 절감을 위해 저사양 서버를 사용하면 트래픽 스파이크를 견디지 못합니다.
+
+따라서 본 실험은 **최대 7,000명의 동시 접속자**가 몰리는 극한의 상황을 가정하여 다음과 같은 목표를 달성하고자 했습니다.
+
+1. **최적의 인스턴스 선정:** AWS의 범용 인스턴스(T시리즈)와 컴퓨팅 최적화 인스턴스(C시리즈)의 실제 부하 견딤 능력(지구력) 검증.
+2. **Python 애플리케이션 한계 분석:** Python(Flask) 기반 애플리케이션이 멀티 코어 환경에서 실제로 어떻게 동작하는지 분석하여, 무의미한 스케일업(Scale-up)을 방지하고 비용 효율성을 극대화.
+
+<br/>
+
+### 1-3. 실험 개요 (Experiment Comparison)
+
+서비스의 안정성을 데이터로 증명하기 위해 다양한 EC2 인스턴스 환경에서 비교 분석을 수행했습니다.
+
+* **비교군 1 (세대별 비교):** **AWS T2 (Xen)** vs **AWS T3 (Nitro)**
+* *가설:* 구형 아키텍처(T2)보다 신형 Nitro 시스템(T3)이 크레딧 고갈 상황에서 더 안정적일 것이다.
+
+
+* **비교군 2 (스펙별 비교):** **C6i.large (2 vCPU)** vs **xlarge (4 vCPU)** vs **2xlarge (8 vCPU)**
+* *가설:* vCPU가 늘어나면 처리량(RPS)도 비례해서 증가할 것이다. (검증 결과: **False** - GIL 이슈 확인)
+
+<br/>
+
+### 1-4. 실험 환경 및 방법 (Methodology)
+
+실제 사용자가 몰리는 상황을 재현하기 위해 부하 테스트 도구와 실시간 모니터링 도구를 결합하여 크로스 체크를 진행했습니다.
+
+**🛠 사용 도구 (Tools)**
+
+* **Locust:** 부하 발생 및 애플리케이션 성능 지표(RPS, 응답시간, 실패율) 측정
+* **Netdata:** 서버 내부의 리소스 상태(CPU Usage, Steal Time, Core utilization) 실시간 시각화
+
+**📉 테스트 시나리오 (Test Scenarios)**
+
+* **Scenario A: 기본 부하 (Basic Load)**
+* **Users:** 3,000명 (일반적인 선착순 이벤트 상황 가정)
+* **Spawn Rate:** 100 users/sec (30초 만에 피크 도달)
+* *목적:* 서버의 기초 체력 및 안정적인 트래픽 처리 능력 검증
+
+
+* **Scenario B: 극한 부하 (Extreme Stress)**
+* **Users:** **7,000명** (예상치를 2배 이상 초과한 트래픽 폭주 상황)
+* **Spawn Rate:** **500 users/sec** (매우 급격한 유입)
+* *목적:* 서버의 한계(Limit) 상황에서 인스턴스별 **성능 격차(Performance Gap)** 및 **지연 시간(Latency) 차이** 비교 분석
+
+<br/>
+
+### 1-5. 테스트 시뮬레이션 코드 (Simulation Code)
+
+① 수비자 (Target Server) : CPU 부하 시뮬레이션 
+
+* **File:** `app.py`
+
+```python
+from flask import Flask, jsonify
+import hashlib
+import time
+
+app = Flask(__name__)
+stock = 1000  # 선착순 1,000명 한정
+
+@app.route('/join', methods=['POST'])
+def join_event():
+    global stock
+    
+    # [CPU 부하 테스트 포인트]
+    # 실제 서비스의 복잡한 비즈니스 로직/암호화를 시뮬레이션
+    # t2.micro와 c5.large의 연산 속도 차이를 측정하기 위함
+    for _ in range(50000): 
+        hashlib.sha256(b"transaction_verification").hexdigest()
+    
+    if stock > 0:
+        stock -= 1
+        return jsonify({"status": "success", "remain": stock}), 200
+    else:
+        return jsonify({"status": "fail", "msg": "Sold Out"}), 410
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+
+```
+
+② 공격자 (Load Generator) : 트래픽 발생기 
+
+* **File:** `locustfile.py`
+
+```python
+from locust import HttpUser, task, between
+
+class TrafficGenerator(HttpUser):
+    # 유저 1명당 1~2초 간격으로 재요청 (광클 방지 텀)
+    wait_time = between(1, 2)
+
+    @task
+    def attempt_join(self):
+        self.client.post("/join")
+
+```
+
+---
+
+### 1. 세대별/크기별 성능 비교: T2 vs T3 (구형 vs 신형)
+
+T2(Xen)와 T3(Nitro) 인스턴스의 크기 및 시나리오별 전체 테스트 결과입니다.
+
+| 세대 (Family) | 크기 (Size) | 시나리오 | RPS (처리량) | 평균 응답시간 | P99 응답시간 (최악) | 실패율 (Fail%) | 비고 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **T2** | micro | 기본 (Basic) | 27.91 | 12,014 ms | 56,000 ms | 55.8% |  |
+| **T2** | micro | **극한 (Stress)** | 28.22 | 12,898 ms | 57,000 ms | 66.8% | 성능 저하 심각 |
+| **T2** | medium | 기본 (Basic) | 29.68 | 10,617 ms | 34,000 ms | 50.6% |  |
+| **T2** | medium | **극한 (Stress)** | 28.61 | 13,329 ms | 54,000 ms | 52.5% | Steal Time 발생 |
+| **T2** | 2xlarge | 기본 (Basic) | 29.01 | 11,390 ms | 38,000 ms | 51.2% |  |
+| **T2** | 2xlarge | **극한 (Stress)** | 29.08 | 12,878 ms | 54,000 ms | 51.5% |  |
+| **T3** | medium | 기본 (Basic) | **33.42** | 10,711 ms | 42,000 ms | 56.4% | **동급 T2 대비 +12% 성능** |
+| **T3** | medium | **극한 (Stress)** | **32.61** | **11,500 ms** | 56,000 ms | 52.9% | **Latency 방어 우수** |
+| **T3** | 2xlarge | 기본 (Basic) | 32.94 | 11,117 ms | 41,000 ms | 52.3% |  |
+| **T3** | 2xlarge | **극한 (Stress)** | 31.07 | 11,809 ms | 44,000 ms | 56.9% |  |
+
+<br/>
+
+> **📌 분석 결과**
+> * 모든 구간에서 **T3가 T2보다 약 10~15% 높은 RPS**를 기록함.
+> * 특히 **극한(Stress) 상황**에서 T2는 응답 시간이 급격히 느려지나(13.3초), T3는 상대적으로 안정적임(11.5초).
+
+<br/>
+
+**T2.medium 극한 테스트**
+
+<img width="592" height="225" alt="T2 medium - 극한 테스트" src="https://github.com/user-attachments/assets/8879eb1a-db62-40a6-a6eb-3a0fea4e421a" />
+
+<br/>
+
+**T3.medium 극한 테스트**
+
+<img width="592" height="225" alt="극한 성능 t3 medium" src="https://github.com/user-attachments/assets/95281eef-2bcf-4cea-8e38-a36074c44992" />
+
+---
+
+### 2. 스펙별 성능 비교: C6i 시리즈 (Scale-up 효율성)
+
+최신 인스턴스인 C6i의 vCPU 개수 증가에 따른 성능 변화 테스트 결과입니다.
+
+| 모델명 | vCPU | 시나리오 | RPS (처리량) | 평균 응답시간 | P99 응답시간 | 실패율 (Fail%) | 가성비 평가 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **C6i.large** | 2 | 기본 (Basic) | **49.60** | **6,648 ms** | 18,000 ms | 58.3% | ⭐ **Best** |
+| **C6i.large** | 2 | **극한 (Stress)** | **48.34** | **6,679 ms** | 18,000 ms | 59.6% | **안정적 방어** |
+| **C6i.xlarge** | 4 | 기본 (Basic) | 39.90 | 11,292 ms | 27,000 ms | 51.1% | 성능 하락 |
+| **C6i.xlarge** | 4 | **극한 (Stress)** | 37.96 | 14,709 ms | 33,000 ms | 59.6% | 불안정 |
+| **C6i.2xlarge** | 8 | 기본 (Basic) | 48.50 | 6,570 ms | 18,000 ms | 58.5% | Large와 동일 |
+| **C6i.2xlarge** | 8 | **극한 (Stress)** | 47.35 | 8,116 ms | 21,000 ms | 58.7% | 비용 낭비 |
+
+<br/>
+
+> **📌 분석 결과**
+> * **병목 현상(Bottleneck):** vCPU를 2개(Large)에서 8개(2xlarge)로 4배 늘렸으나, **RPS는 49 → 48로 변화가 없음.**
+> * **원인:** Python Single Thread 한계로 인해 추가 코어를 전혀 활용하지 못함.
+> * **결론:** 고사양 인스턴스(Scale-up)는 효과가 없으며, **C6i.large(2 vCPU)가 최적의 선택**임.
+
+
+
+<br/>
+
+**C6i.large 기본 테스트**
+
+<img width="592" height="225" alt="c6large" src="https://github.com/user-attachments/assets/23b597d5-aeb6-4b66-a128-155b087e7fe7" />
+
+<br/>
+
+**C6i.xlarge 기본 테스트**
+
+<img width="592" height="225" alt="c6xlarge" src="https://github.com/user-attachments/assets/f922f4dc-cf36-495f-a8ba-f686581e5916" />
+
+<br/>
+
+**C6i.2xlarge 기본 테스트**
+
+<img width="592" height="225" alt="c62xlarge" src="https://github.com/user-attachments/assets/07078d6b-2711-4796-9692-703918b567d7" />
+
+---
+
+### 3. 모니터링 및 안정성 검증 (CPU Endurance Test)
+
+Netdata를 활용하여 부하 테스트(15분 지속) 중 CPU의 실시간 상태를 분석했습니다. 이를 통해 T3 인스턴스의 'CPU 크레딧' 정책이 실제 서비스에 미치는 영향을 시각적으로 검증했습니다.
+
+#### ① C6i.large : 안정적인 성능 유지 (Stable)
+
+<img width="2304" height="796" alt="image" src="https://github.com/user-attachments/assets/5f291217-64ad-42fd-942b-8ea9086b8784" />
+
+* **관측 결과:** 지속적인 고부하 상황(Load)에서도 CPU 사용률이 100%로 일정하게 유지됨.
+* **분석:** `Steal Time`이나 성능 저하 없이 요청을 안정적으로 처리함. 전용 하드웨어(Dedicated Hardware) 기반 인스턴스의 이점이 확인됨.
+
+#### ② T3.medium : 크레딧 고갈 및 성능 저하 (Throttling)
+
+<img width="2394" height="726" alt="image" src="https://github.com/user-attachments/assets/4849669b-1416-409c-bcf6-3afa6f97ce1a" />
+
+* **관측 결과:** 테스트 시작 약 15분 경과 후, 그래프 높이가 급격히 하락하며 불안정한 파동을 그림.
+* **분석 (핵심):**
+1. **Credit Exhaustion:** CPU 크레딧이 모두 소진되어 강제 성능 제한(Throttling) 발생.
+2. **Steal Time 발생:** 그래프 상단의 **붉은 영역(Steal)**은 물리적 CPU 자원을 할당받지 못해 발생하는 대기 시간(Lag)을 의미함.
+
+
+---
+
+### 4. 종합 결론 및 인사이트 (Final Conclusion & Insights)
+
+본 프로젝트를 통해 "트래픽이 폭주하는 선착순 이벤트" 환경에서 인프라와 애플리케이션의 한계를 실험적으로 검증했습니다. 데이터에 기반한 최종 의사결정은 다음과 같습니다.
+
+#### 4-1. 인프라 선정: "가성비의 T3 vs 신뢰의 C6i"
+
+* **T3.medium (Nitro):** T2 대비 월등한 방어력을 보여주었으나, 15분 이상 부하가 지속될 경우 크레딧 고갈(Credit Exhaustion)로 인한 성능 저하 위험이 존재합니다. 평상시 트래픽 처리용으로 적합합니다.
+* **C6i.large (Compute Optimized):** 크레딧 제약 없이 **CPU를 100% 활용**할 수 있어, 예측 불가능한 트래픽 스파이크 상황에서도 **지연 시간(Latency) 흔들림 없는 안정성**을 보장합니다.
+
+> **💡 최종 제언:**
+> 선착순 이벤트와 같이 **고객 신뢰가 핵심인 서비스**에서는 비용이 소폭 상승하더라도 **C6i.large**를 사용하는 것이 비즈니스 리스크를 최소화하는 최적의 선택입니다.
+
+#### 4-2. 아키텍처 한계 발견: "무의미한 스케일업(Scale-up)의 함정"
+
+가장 중요한 발견은 **비싼 서버가 능사가 아니다**라는 점입니다.
+
+* **현상:** vCPU를 2개(Large)에서 8개(2xlarge)로 4배 늘렸음에도 **RPS(처리량)는 제자리걸음**이었습니다.
+* **원인:** Python(Flask)의 **GIL(Global Interpreter Lock)** 특성상, 단일 프로세스는 멀티 코어의 이점을 전혀 누리지 못했습니다.
+* **교훈:** 애플리케이션 구조 개선(예: Gunicorn, Nginx 활용) 없이 하드웨어 스펙만 올리는 것은 **명백한 비용 낭비**임을 증명했습니다.
+
+#### 4-3. 최종 아키텍처 전략 (Final Decision)
+
+| 구분 | 인스턴스 유형 | 추천 사유 | 비고 |
+| --- | --- | --- | --- |
+| **평상시 (Normal)** | **T3.medium** | T2 대비 우수한 가성비와 적절한 버스트 처리 능력 | 비용 효율화 중심 |
+| **이벤트 (Event)** | **C6i.large** | **No Steal Time, No Throttling.** 완벽한 성능 보장 | 안정성 중심 |
+| **비추천 (Avoid)** | **C6i.xlarge 이상** | Python GIL 이슈로 인한 자원 낭비 발생 | 아키텍처 개선 전까지 지양 |
+
+> **🚀 결론:**
+> "서버는 죽지 않는다"는 목표를 달성하기 위해, 우리는 무조건적인 고사양 서버 도입 대신 **애플리케이션의 특성(Python GIL)을 이해하고, 워크로드(선착순)에 맞는 전용 인스턴스(C6i)를 선별**하는 과정을 거쳤습니다. 이를 통해 **비용은 최소화하면서도 가용성은 극대화**하는 최적의 합의점을 도출했습니다.
+
+
+
