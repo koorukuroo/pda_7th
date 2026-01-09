@@ -6,7 +6,106 @@
 
 특히 KOSPI와 NASDAQ 지수 간의 **상관관계 분석 및 회귀 분석**과 같은 통계 연산을 반복 수행하여, 순수 CPU 연산 성능을 측정하였다.
 
----
+## 무엇을 분석 했을까 📊 💰 💵 🇰🇷 🇺🇸
+<details>
+<summary> 📈📈📈 KOSPI🇰🇷 vs NASDAQ🇺🇸 상관·베타 분석 (Stooq CSV)</summary>
+
+
+## 1. 목적
+**한국 주식시장(KOSPI)이 미국 주식시장(NASDAQ)의 움직임과 얼마나 같이 움직이는지**,  
+그리고 **미국 시장의 변동에 한국 시장이 얼마나 민감하게 반응하는지**를 정량적으로 분석
+
+특히,
+- 같은 날의 관계(same-day)와
+- **전일 NASDAQ → 당일 KOSPI(lag1)** 관계 중  
+어느 쪽이 더 설명력이 있는지를 확인하는 것이 목적이다.
+    - Lag1은 전일 NASDAQ 수익률이 다음 날 KOSPI 수익률에 얼마나 영향을 미치는지를 보기 위한 시간차 변수
+    - Lag1은 달력 날짜가 아니라 시장 세션 기준으로, 전일 미국 시장(한국 시간 새벽 마감)이 당일 한국 시장(아침 개장)에 반영되는 관계를 의미한다.
+
+
+
+## 2. 어떤 데이터를 사용했는가
+- 데이터 출처: **Stooq**
+- 데이터 형식: 일별 CSV (HTTP 다운로드)
+- 사용 지수:
+  - KOSPI 지수 (`^kospi`)
+  - NASDAQ Composite 지수 (`^ndq`)
+- 사용 컬럼: **Date, Close(종가)**
+- 분석 기간: **2016-01-01 ~ 최신**
+
+
+## 3. 어떤 연산을 했는가
+
+### (1) 수익률 계산
+- 종가를 **로그수익률**로 변환
+\[
+r_t = \ln(P_t) - \ln(P_{t-1})
+\]
+    * 로그 수익률은 기간별로 더해서 누적 수익률을 표현할 수 있어 시계열 분석에 적합      
+    * 분포가 더 안정적이고 대칭적이라 상관관계·회귀(베타) 같은 통계 분석에 유리
+
+### (2) 상관관계 분석
+- Same-day: `KOSPI(t)` vs `NASDAQ(t)`
+- Lag1: `KOSPI(t)` vs `NASDAQ(t-1)`
+
+→ 두 시장이 얼마나 함께 움직이는지 측정
+
+### (3) 베타(회귀) 분석
+OLS 회귀로 NASDAQ 변동에 대한 KOSPI의 민감도를 계산
+
+- Same-day 회귀  
+\[
+KOSPI_t = \alpha + \beta \cdot NASDAQ_t
+\]
+
+- Lag1 회귀  
+\[
+KOSPI_t = \alpha + \beta \cdot NASDAQ_{t-1}
+\]
+
+→ β(베타), R², p-value를 통해 영향력과 통계적 유의성 판단
+
+
+## 4. 어떤 결과를 얻었는가
+출력되는 핵심 결과는 다음 두 세트다.
+
+- **Same-day 결과**
+  - 상관계수(Corr)
+  - 베타(beta)
+  - 설명력(R²)
+  - 유의확률(p-value)
+
+- **Lag1 결과**
+  - 상관계수(Corr)
+  - 베타(beta)
+  - 설명력(R²)
+  - 유의확률(p-value)
+
+
+
+## 5. 결론
+
+분석 결과, 같은 날(Same-day)보다 **전일 NASDAQ → 당일 KOSPI(Lag1)** 관계가 더 뚜렷하게 나타났다.
+
+- Same-day 관계는 상관계수 0.192, 베타 0.154로 약한 수준이며  
+  설명력(R²=0.037)도 낮아 NASDAQ 변동이 같은 날 KOSPI 변동을 충분히 설명하지 못한다.
+- 반면 Lag1 관계는 상관계수 0.343, 베타 0.275로 더 크고,  
+  설명력(R²=0.118)과 통계적 유의성(p < 0.001)도 확보되었다.
+
+이는 **미국 시장의 변동이 즉시 반영되기보다는, 하루의 시차를 두고 한국 시장에 전달되는 경향**이 있음을 의미한다.
+
+
+
+## 6. 한 줄 요약 💵💵💵
+
+> > **KOSPI는 같은 날의 NASDAQ보다, 전일 NASDAQ 변동이 다음 날 시장에 반영되는 경향이 더 뚜렷하다 (NASDAQ(t−1) → KOSPI(t)).**
+
+
+
+
+</details>
+
+
 
 ## 2. 실험 환경 및 설정
 
@@ -42,115 +141,8 @@
 
 ---
 
-## 3. 테스트 코드 설명
 
-### 3.1 전체 코드 구조
-
-```python
-# ============================================================
-# KOSPI vs NASDAQ : Stooq CSV HTTP + Analysis + Benchmark
-# ============================================================
-
-import warnings
-warnings.filterwarnings("ignore")
-
-import os, time, platform
-import numpy as np
-import pandas as pd
-import statsmodels.api as sm
-import requests
-from io import StringIO
-
-# 성능 측정 준비
-import psutil
-_proc = psutil.Process()
-_cpu_samples = []
-_mem_samples = []
-```
-
-### 3.2 주요 함수
-
-#### (1) 데이터 다운로드 및 캐싱
-
-```python
-def download_stooq_close(stooq_symbol: str, start: str, end=None, timeout=20) -> pd.Series:
-    """
-    Stooq CSV를 HTTP로 가져와 Close 가격을 Series로 반환.
-    USE_CACHE=True면 로컬 파일에 저장 후 재사용하여 네트워크 영향 제거.
-    """
-    cache_file = _cache_path(stooq_symbol)
-
-    # 캐시 로드
-    if USE_CACHE and os.path.exists(cache_file):
-        df = pd.read_csv(cache_file)
-    else:
-        # 네트워크 다운로드
-        url = f"https://stooq.com/q/d/l/?s={stooq_symbol}&i=d"
-        headers = {"User-Agent": "Mozilla/5.0"}
-        r = requests.get(url, headers=headers, timeout=timeout)
-        df = pd.read_csv(StringIO(r.text))
-
-        # 캐시 저장
-        if USE_CACHE:
-            df.to_csv(cache_file, index=False)
-
-    # 날짜 필터링 및 전처리
-    df["Date"] = pd.to_datetime(df["Date"])
-    df = df[df["Date"] >= pd.to_datetime(start)]
-
-    return df.set_index("Date")["Close"]
-```
-
-#### (2) 통계 분석 함수
-
-```python
-def step_analysis_only(px: pd.DataFrame):
-    """
-    금융 데이터 분석 워크로드:
-    1. 로그 수익률 계산
-    2. OLS 회귀 분석 (베타 계산)
-    3. 롤링 상관계수 (60일 윈도우)
-    """
-    # 수익률 계산
-    kospi_r = returns_from_price(px[KOSPI], USE_LOG_RETURN)
-    nasdaq_r = returns_from_price(px[NASDAQ], USE_LOG_RETURN)
-
-    df = pd.concat([kospi_r, nasdaq_r], axis=1).dropna()
-    df.columns = ["KOSPI", "NASDAQ"]
-    df["NASDAQ_lag1"] = df["NASDAQ"].shift(1)
-
-    # 상관계수
-    corr_same = df["KOSPI"].corr(df["NASDAQ"])
-    corr_lag1 = df["KOSPI"].corr(df["NASDAQ_lag1"])
-
-    # OLS 회귀 분석
-    alpha, beta, r2, pval, n = ols_beta(df["KOSPI"], df["NASDAQ"])
-
-    # 롤링 상관계수
-    roll_corr = df["KOSPI"].rolling(ROLL_WINDOW).corr(df["NASDAQ"])
-
-    return df, corr_same, corr_lag1, alpha, beta, r2, pval, roll_corr
-```
-
-#### (3) 벤치마크 실행
-
-```python
-# 워밍업 (캐시/BLAS 최적화 완료)
-for _ in range(WARMUP_REPEAT):
-    _ = step_analysis_only(px)
-
-# 본 벤치마크 (분석만 80회 반복)
-t0 = time.perf_counter()
-for _ in range(BENCH_REPEAT):
-    last = step_analysis_only(px)
-t_analysis = time.perf_counter() - t0
-
-# 처리량 계산
-rows = len(df)
-analysis_throughput = (rows * BENCH_REPEAT / t_analysis)
-```
-
-### 3.3 성능 측정 방식
+### 3. 성능 측정 방식
 
 **네트워크와 CPU 연산을 분리하여 측정**하였다:
 
@@ -160,7 +152,7 @@ analysis_throughput = (rows * BENCH_REPEAT / t_analysis)
 
 이를 통해 **네트워크 지연의 영향을 제거**하고, 순수한 인스턴스 연산 성능만을 비교할 수 있었다.
 
----
+
 
 ## 4. 실험 결과
 
@@ -188,7 +180,7 @@ analysis_throughput = (rows * BENCH_REPEAT / t_analysis)
 6. t3.micro - 204,554 rows/s (2.01배 느림)
 7. t3.large - 175,965 rows/s (2.33배 느림) ⚠️
 
----
+
 
 ## 5. 분석 및 인사이트
 
@@ -263,7 +255,6 @@ t3.large는 **크레딧 소진 후 베이스라인으로 제한**되었을 가�
 | **T 계열 (micro/small)** | 버스트형, 저가        | ⭐⭐ 양호          | 개발/테스트, 간헐적 작업 |
 | **T 계열 (large 이상)**  | 버스트형, 과한 스펙   | ❌ 비효율          | 이 작업엔 부적합         |
 
----
 
 ## 7. 결론 및 권장 사항
 
