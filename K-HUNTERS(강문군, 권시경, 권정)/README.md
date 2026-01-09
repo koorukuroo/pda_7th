@@ -76,7 +76,7 @@ HTTP 부하 발생 도구인 hey를 사용하여 실제 접속 상황을 모사�
 
 ## 추가적인 분석
 
-### 가혹 테스트 결과 비교 (100,000 Requests / 500 Concurrency)
+### 1. 가혹 테스트 결과 비교 (100,000 Requests / 500 Concurrency)
 
 1. 한계 성능을 파악하기 위해 실시한 초고부하 테스트 결과, 최신 세대인 m7g 인스턴스가 c6g 대비 모든 지표에서 우월한 성능을 기록하였음.
 
@@ -93,3 +93,17 @@ HTTP 부하 발생 도구인 hey를 사용하여 실제 접속 상황을 모사�
 
 <img width="1100" height="666" alt="Image" src="https://github.com/user-attachments/assets/824f64b9-7096-49c4-be46-07e40e1f7d7a" />
 
+### 3. 네트워크의 차이 분석
+
+1. 처음 가설
+- 네트워크(로컬 vs 퍼블릭 ip) 때문이 아니었나?
+- m 계열이 더 빠른 건 네트워크 때문이 아닌가?
+
+2. 모두 로컬로 변경
+- 네트워크 비용은 거의 0
+- 서버 내부에서 요청이 처리되기까지 대기하는 시간이 성능을 결정하기 때문에
+- cpu 사용 + 메모리 접근 + 객체 성능이 균형한 M계열이 더 좋은 성능을 보임
+
+<img width="900" height="666" alt="Image" src="https://github.com/user-attachments/assets/80951883-589f-4408-8bda-884c02eec7fa" />
+
+<img width="900" height="666" alt="Image" src="https://github.com/user-attachments/assets/f1e8e040-354c-45c9-bb94-8601594fea79" />
