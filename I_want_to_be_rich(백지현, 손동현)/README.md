@@ -6,7 +6,7 @@
 
 특히 KOSPI와 NASDAQ 지수 간의 **상관관계 분석 및 회귀 분석**과 같은 통계 연산을 반복 수행하여, 순수 CPU 연산 성능을 측정하였다.
 
-## 무엇을 분석 했을까 📊 💰 💵 🇰🇷 🇺🇸
+## 무엇을 했을까! 토글을 보자! 📊 💰 💵 🇰🇷 🇺🇸
 <details>
 <summary> 📈📈📈 KOSPI🇰🇷 vs NASDAQ🇺🇸 상관·베타 분석 (Stooq CSV)</summary>
 
@@ -80,6 +80,13 @@ KOSPI_t = \alpha + \beta \cdot NASDAQ_{t-1}
   - 베타(beta)
   - 설명력(R²)
   - 유의확률(p-value)
+
+<img width="400" height="400" alt="스크린샷 2026-01-09 오전 9 14 28" src="https://github.com/user-attachments/assets/96212335-37f5-46e7-863b-91314ee37982" />
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/905f7a37-457a-4689-8086-2a5b02729def" />
+
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/5e5a8d8b-a219-454e-95d4-9f6fe896e9c3" /><img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/225e3afa-07a6-4e36-843d-cd5973d2464e" />
+
+
 
 
 
