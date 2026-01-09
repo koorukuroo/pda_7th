@@ -133,8 +133,18 @@ T2(Xen)와 T3(Nitro) 인스턴스의 크기 및 시나리오별 전체 테스트
 > **📌 분석 결과**
 > * 모든 구간에서 **T3가 T2보다 약 10~15% 높은 RPS**를 기록함.
 > * 특히 **극한(Stress) 상황**에서 T2는 응답 시간이 급격히 느려지나(13.3초), T3는 상대적으로 안정적임(11.5초).
-> 
-> 
+
+<br/>
+
+**T2.medium 극한 테스트**
+
+<img width="592" height="225" alt="T2 medium - 극한 테스트" src="https://github.com/user-attachments/assets/8879eb1a-db62-40a6-a6eb-3a0fea4e421a" />
+
+<br/>
+
+**T3.medium 극한 테스트**
+
+<img width="592" height="225" alt="극한 성능 t3 medium" src="https://github.com/user-attachments/assets/95281eef-2bcf-4cea-8e38-a36074c44992" />
 
 ---
 
@@ -157,15 +167,26 @@ T2(Xen)와 T3(Nitro) 인스턴스의 크기 및 시나리오별 전체 테스트
 > * **병목 현상(Bottleneck):** vCPU를 2개(Large)에서 8개(2xlarge)로 4배 늘렸으나, **RPS는 49 → 48로 변화가 없음.**
 > * **원인:** Python Single Thread 한계로 인해 추가 코어를 전혀 활용하지 못함.
 > * **결론:** 고사양 인스턴스(Scale-up)는 효과가 없으며, **C6i.large(2 vCPU)가 최적의 선택**임.
-> 
->
-**T2.medium 극한 테스트**
-<img width="592" height="225" alt="T2 medium - 극한 테스트" src="https://github.com/user-attachments/assets/8879eb1a-db62-40a6-a6eb-3a0fea4e421a" />
+
+
 
 <br/>
 
-**T3.medium 극한 테스트**
-<img width="592" height="225" alt="극한 성능 t3 medium" src="https://github.com/user-attachments/assets/95281eef-2bcf-4cea-8e38-a36074c44992" />
+**C6i.large 기본 테스트**
+
+<img width="592" height="225" alt="c6large" src="https://github.com/user-attachments/assets/23b597d5-aeb6-4b66-a128-155b087e7fe7" />
+
+<br/>
+
+**C6i.xlarge 기본 테스트**
+
+<img width="592" height="225" alt="c6xlarge" src="https://github.com/user-attachments/assets/f922f4dc-cf36-495f-a8ba-f686581e5916" />
+
+<br/>
+
+**C6i.2xlarge 기본 테스트**
+
+<img width="592" height="225" alt="c62xlarge" src="https://github.com/user-attachments/assets/07078d6b-2711-4796-9692-703918b567d7" />
 
 ---
 
@@ -191,6 +212,7 @@ Netdata를 활용하여 부하 테스트(15분 지속) 중 CPU의 실시간 상�
 
 
 * **결론:** 선착순 이벤트와 같이 트래픽이 지속되는 환경에서는 T계열 인스턴스가 서비스 지연(Latency Spike)의 원인이 될 수 있음.
+
 
 
 
