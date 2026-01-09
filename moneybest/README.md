@@ -98,6 +98,11 @@ EC2 인스턴스의 **크기와 인스턴스 유형 차이에 따라 추론 성�
 - **같은 메모리 급(16xlarge 비교)**에서는 **m5 > g5 > r5** 순으로 빠르게 측정됨. 이는 본 워크로드가 **CPU 연산/메모리 접근**에 상대적으로 민감하고, **GPU 최적화(배치/정밀도/엔진)**가 충분히 적용되지 않았기 때문일 수 있음.
 - LLM 추론 전반에서는 **GPU 최적화가 이루어질수록** G5 계열이 비용 대비 성능에서 유리해지는 것이 일반적입니다. (공식 블로그 인사이트 참고)
 
+  <img width="3569" height="2069" alt="set1_metrics" src="https://github.com/user-attachments/assets/f223a9d9-c631-4ec7-8e45-3049ffd2342d" />
+  
+<img width="3569" height="2069" alt="set2_metrics" src="https://github.com/user-attachments/assets/f393e2d3-b4ec-4227-87ea-6354d10e0e56" />
+
+
 ---
 
 ## 5) 권장 사항
