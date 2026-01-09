@@ -6,9 +6,9 @@
 본 테스트는 금융 챗봇 본 실험은 금융 챗봇 + RAG + 크롤링 통합 서비스 환경에서 AWS EC2 인스턴스 유형(T4g.micro, C6g.medium)에 따른 성능 차이를 비교하여 **비용 대비 안정적이고 확장 가능한 인스턴스 선택 기준을 도출하는 것**을 목적으로 합니다.
 
 ## 🎯 주요 기능
-![부하 테스트 실행 화면](images/KakaoTalk_20260109_100241580.gif)
-![크롤링 실행 결과](images/KakaoTalk_20260109_100344818.gif)
-![R4.large 테스트 화면](images/KakaoTalk_20260109_100420781.gif)
+![부하 테스트 실행 화면](../chatchat/images/KakaoTalk_20260109_100241580.gif)
+![크롤링 실행 결과](../chatchat/images/KakaoTalk_20260109_100344818.gif)
+![R4.large 테스트 화면](../chatchat/images/KakaoTalk_20260109_100420781.gif)
 
 ---
 
