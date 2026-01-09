@@ -1,4 +1,4 @@
-# EC2 인스턴스 성능 비교 리포트
+# 증권 거래 시스템을 위한 Burstable과 Memory-Optimized 인스턴스 심층 분석
 
 ## 1. 목적
 
