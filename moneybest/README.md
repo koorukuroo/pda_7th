@@ -41,6 +41,22 @@ EC2 인스턴스의 **크기와 인스턴스 유형 차이에 따라 추론 성�
 | **r5.8xlarge**  | 32 vCPU / 256 GB       | 69.578           | 15.26 chars/s   | 5.13 chars/s | 12.25 MB   |
 | **r5.16xlarge** | 64 vCPU / 512 GB       | 49.829           | 21.31 chars/s   | 4.29 chars/s | 11.50 MB   |
 
+
+<div align="center">
+
+  <!-- 1행 (3개) -->
+  <img style="width:32%;" src="https://github.com/user-attachments/assets/109637fc-bd34-42e4-b3c2-5b84e635efcc">
+  <img style="width:32%;" src="https://github.com/user-attachments/assets/3d8dd1d3-d9a8-4161-8964-0de02cadf3af">
+  <img style="width:32%;" src="https://github.com/user-attachments/assets/af50be37-11e1-4381-858d-fe94b3ab59ac">
+  <br/>
+
+  <!-- 2행 (3개) -->
+  <img style="width:32%;" src="https://github.com/user-attachments/assets/29b4492b-a42e-4013-9129-ced145ecc8d0">
+  <img style="width:32%;" src="https://github.com/user-attachments/assets/a0df57bd-d325-41a4-9feb-366e646d1165">
+  <img style="width:32%;" src="https://github.com/user-attachments/assets/d8deac4f-0d8c-4105-ac1a-e585720548f6">
+
+</div>
+
 > R5 메모리/사이즈 스펙은 AWS 공식 문서에 근거합니다. (R5 [AWS](https://aws.amazon.com/ec2/instance-types/r5/))
 
 **해석**
@@ -61,6 +77,22 @@ EC2 인스턴스의 **크기와 인스턴스 유형 차이에 따라 추론 성�
 | **r5.16xlarge** | 메모리 최적화 (Nitro) | 49.829           | 21.31 chars/s   | 4.29 chars/s | 11.50 MB   |
 | **g5.16xlarge** | NVIDIA A10G GPU 기반  | 41.351           | 25.68 chars/s   | 5.08 chars/s | 11.50 MB   |
 | **m5.16xlarge** | 범용/AVX‑512 (Nitro)  | 37.753           | 28.13 chars/s   | 5.54 chars/s | 12.00 MB   |
+
+<div align="center">
+
+  <!-- 1행 (3개) -->
+  <img style="width:32%;" src="https://github.com/user-attachments/assets/1e425a45-0fcb-4879-b77c-241fa090eb1a">
+  <img style="width:32%;" src="https://github.com/user-attachments/assets/dcd2e8c3-b587-4392-b0a8-2788411cbfda">
+  <img style="width:32%;" src="https://github.com/user-attachments/assets/0839e44a-2ac2-4bd6-b067-1cbcef9d54e2">
+  <br/>
+
+  <!-- 2행 (3개) -->
+  <img style="width:32%;" src="https://github.com/user-attachments/assets/40c39788-32a3-4e68-8e29-403d76fa702f">
+  <img style="width:32%;" src="https://github.com/user-attachments/assets/ca844999-2bcc-473e-b7e4-68c86c7dfc2a">
+  <img style="width:32%;" src="https://github.com/user-attachments/assets/fc494781-aa4d-40c9-8e69-fbbb2c7b36f3">
+
+</div>
+
 
 **해석**
 
